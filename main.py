@@ -182,7 +182,7 @@ def main():
     import pandas as pd
     faktury=puzzle_invoices()
     root=faktury.import_xml()
-    #print(faktury.get_netto(root))
+
     lista=[[faktury.get_data_wystawienia(root)],
            [faktury.get_termin(root)],
            [faktury.get_numer(root)],
@@ -192,9 +192,12 @@ def main():
     nazwy=pd.Series(lista)
 
 
+    # print(pd.read_xml('faktury.xml'))
+    bank_data = pd.read_csv('wyciag.csv', encoding='windows-1250')
+    print(bank_data)
     print(lista)
     print(nazwy)
-    # data_wystawienia=faktury.get_data_wystawienia(root)
+
 
 if __name__ == "__main__":
     main()
