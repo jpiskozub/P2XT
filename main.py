@@ -91,16 +91,99 @@ class puzzle_invoices:
         return (faktury)
 
     def get_data_wystawienia(self,root):
+
+        data_wystawienia=[]
         for dokument in root.findall('dokument'):
-            data_wystawienia=dokument.find('data_wystawienia').text
-            print(data_wystawienia)
+            data_wystawienia.append(dokument.find('data_wystawienia').text)
+        return (data_wystawienia)
+
+    def get_termin(self,root):
+
+        termin=[]
+        for dokument in root.findall('dokument'):
+            termin.append(dokument.find('termin').text)
+        return termin
+
+    def get_numer(self,root):
+
+        numer_faktury=[]
+        for dokument in root.findall('dokument'):
+            numernumer_faktury.append(dokument.find('numer').text)
+        return numer_faktury
+
+    def get_NIP(self,root):
+        numer_nip = []
+        for dokument in root.findall('dokument'):
+            kontrahent = dokument.find('kontrahent')
+            for nip in kontrahent.iter('NIP'):
+                numer_nip.append(nip.text)
+        return numer_nip
+
+    def get_nazwa_kontrahenta(self,root):
+        nazwa_kontrahenta = []
+        for dokument in root.findall('dokument'):
+            kontrahent = dokument.find('kontrahent')
+            for nazwa in kontrahent.iter('nazwa'):
+                nazwa_kontrahenta.append(nazwa.text)
+        return nazwa_kontrahenta
+
+    def get_adres_kontrahenta(self,root):
+        adres_kontrahenta = []
+        for dokument in root.findall('dokument'):
+            kontrahent = dokument.find('kontrahent')
+            for adres in kontrahent.iter('adres'):
+                adres_kontrahenta.append(adres.text)
+        return adres_kontrahenta
+
+    def get_kwota(self,root):
+        naleznosc = []
+        for dokument in root.findall('dokument'):
+            ksieguj = dokument.find('ksieguj')
+            for kwota in ksieguj.iter('kwota'):
+                naleznosc.append(kwota.text)
+        return naleznosc
+
+    def get_skala_VAT(self,root):
+        skala_VAT = []
+        for dokument in root.findall('dokument'):
+            rejvat = dokument.find('rejVAT')
+            for skala in rejvat.iter('skala'):
+                skala_VAT.append(skala.text)
+        return skala_VAT
+
+    def get_netto(self,root):
+        kwota_netto = []
+        for dokument in root.findall('dokument'):
+            rejvat = dokument.find('rejVAT')
+            for suma in rejvat.iter('suma'):
+                for netto in suma.iter('netto'):
+                    kwota_netto.append(netto.text)
+        return kwota_netto
+
+    def get_VAT(self,root):
+        kwota_VAT = []
+        for dokument in root.findall('dokument'):
+            rejvat = dokument.find('rejVAT')
+            for suma in rejvat.iter('suma'):
+                for vat in suma.iter('VAT'):
+                    kwota_VAT.append(vat.text)
+        return kwota_VAT
+
+    def get_status(self, root):
+        status = []
+        for dokument in root.findall('dokument'):
+            for zaplata in dokument.iter('zaplata'):
+                status.append(zaplata.text)
+        return status
+
 
 
 def main():
     faktury=puzzle_invoices()
     root=faktury.import_xml()
-    lista=faktury.get_data(root)
-    print (lista)
+    print(faktury.get_netto(root))
+
+    data_wystawienia=faktury.get_data_wystawienia(root)
 
 if __name__ == "__main__":
     main()
