@@ -58,7 +58,7 @@ class puzzle_invoices:
             numer = dokument.find('numer').text
             print(numer)
             kontrahent = dokument.find('kontrahent')
-            for nip in kontrahent.iter('nip'):
+            for nip in kontrahent.iter('NIP'):
                 numer_nip = nip.text
                 print(numer_nip)
             for nazwa in kontrahent.iter('nazwa'):
@@ -71,29 +71,36 @@ class puzzle_invoices:
             for kwota in ksieguj.iter('kwota'):
                 naleznosc = kwota.text
                 print(naleznosc)
-            rejvat = dokument.find('rejvat')
-            # for skala in rejvat.iter('skala'):
-            #     skala_vat= skala.text
-            #     print(skala_vat)
-            # for suma in rejvat.iter('suma'):
-            #     suma_vat = suma.text
-            #     print(suma_vat)
-            #     for netto in suma.iter('netto'):
-            #         kwota_netto = netto.text
-            #         print(kwota_netto)
-            #     for vat in suma.iter('vat'):
-            #         kwota_vat = vat.text
-            #         print(kwota_vat)
+            rejvat = dokument.find('rejVAT')
+            for skala in rejvat.iter('skala'):
+                skala_vat= skala.text
+                print(skala_vat)
+            for suma in rejvat.iter('suma'):
+                suma_vat = suma.text
+                print(suma_vat)
+                for netto in suma.iter('netto'):
+                    kwota_netto = netto.text
+                    print(kwota_netto)
+                for vat in suma.iter('VAT'):
+                    kwota_vat = vat.text
+                    print(kwota_vat)
             for zaplata in dokument.iter('zaplata'):
                 zaplacono = zaplata.text
                 print(zaplacono)
-        return (data, data_wystawienia, termin, numer , nazwa_kontrahenta, numer_nip, suma_vat, kwota_netto, kwota_vat)
+        faktury=[data, data_wystawienia, termin, numer , nazwa_kontrahenta, numer_nip, suma_vat, kwota_netto, kwota_vat]
+        return (faktury)
+
+    def get_data_wystawienia(self,root):
+        for dokument in root.findall('dokument'):
+            data_wystawienia=dokument.find('data_wystawienia').text
+            print(data_wystawienia)
 
 
 def main():
     faktury=puzzle_invoices()
     root=faktury.import_xml()
-    faktury.get_data(root)
+    lista=faktury.get_data(root)
+    print (lista)
 
 if __name__ == "__main__":
     main()
