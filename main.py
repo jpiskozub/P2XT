@@ -47,48 +47,48 @@ class puzzle_invoices:
         root = tree.getroot()
         return root
 
-    def get_data(self, root):
-        for dokument in root.findall('dokument'):
-            data = dokument.find('data').text
-            print(data)
-            data_wystawienia=dokument.find('data_wystawienia').text
-            print(data_wystawienia)
-            termin = dokument.find('termin').text
-            print(termin)
-            numer = dokument.find('numer').text
-            print(numer)
-            kontrahent = dokument.find('kontrahent')
-            for nip in kontrahent.iter('NIP'):
-                numer_nip = nip.text
-                print(numer_nip)
-            for nazwa in kontrahent.iter('nazwa'):
-                nazwa_kontrahenta = nazwa.text
-                print(nazwa_kontrahenta)
-            for adres in kontrahent.iter('adres'):
-                adres_kontrahenta = adres.text
-                print(adres_kontrahenta)
-            ksieguj=dokument.find('ksieguj')
-            for kwota in ksieguj.iter('kwota'):
-                naleznosc = kwota.text
-                print(naleznosc)
-            rejvat = dokument.find('rejVAT')
-            for skala in rejvat.iter('skala'):
-                skala_vat= skala.text
-                print(skala_vat)
-            for suma in rejvat.iter('suma'):
-                suma_vat = suma.text
-                print(suma_vat)
-                for netto in suma.iter('netto'):
-                    kwota_netto = netto.text
-                    print(kwota_netto)
-                for vat in suma.iter('VAT'):
-                    kwota_vat = vat.text
-                    print(kwota_vat)
-            for zaplata in dokument.iter('zaplata'):
-                zaplacono = zaplata.text
-                print(zaplacono)
-        faktury=[data, data_wystawienia, termin, numer , nazwa_kontrahenta, numer_nip, suma_vat, kwota_netto, kwota_vat]
-        return (faktury)
+    # def get_data(self, root):
+    #     for dokument in root.findall('dokument'):
+    #         data = dokument.find('data').text
+    #         print(data)
+    #         data_wystawienia=dokument.find('data_wystawienia').text
+    #         print(data_wystawienia)
+    #         termin = dokument.find('termin').text
+    #         print(termin)
+    #         numer = dokument.find('numer').text
+    #         print(numer)
+    #         kontrahent = dokument.find('kontrahent')
+    #         for nip in kontrahent.iter('NIP'):
+    #             numer_nip = nip.text
+    #             print(numer_nip)
+    #         for nazwa in kontrahent.iter('nazwa'):
+    #             nazwa_kontrahenta = nazwa.text
+    #             print(nazwa_kontrahenta)
+    #         for adres in kontrahent.iter('adres'):
+    #             adres_kontrahenta = adres.text
+    #             print(adres_kontrahenta)
+    #         ksieguj=dokument.find('ksieguj')
+    #         for kwota in ksieguj.iter('kwota'):
+    #             naleznosc = kwota.text
+    #             print(naleznosc)
+    #         rejvat = dokument.find('rejVAT')
+    #         for skala in rejvat.iter('skala'):
+    #             skala_vat= skala.text
+    #             print(skala_vat)
+    #         for suma in rejvat.iter('suma'):
+    #             suma_vat = suma.text
+    #             print(suma_vat)
+    #             for netto in suma.iter('netto'):
+    #                 kwota_netto = netto.text
+    #                 print(kwota_netto)
+    #             for vat in suma.iter('VAT'):
+    #                 kwota_vat = vat.text
+    #                 print(kwota_vat)
+    #         for zaplata in dokument.iter('zaplata'):
+    #             zaplacono = zaplata.text
+    #             print(zaplacono)
+    #     faktury=[data, data_wystawienia, termin, numer , nazwa_kontrahenta, numer_nip, suma_vat, kwota_netto, kwota_vat]
+    #     return (faktury)
 
     def get_data_wystawienia(self,root):
 
@@ -108,7 +108,7 @@ class puzzle_invoices:
 
         numer_faktury=[]
         for dokument in root.findall('dokument'):
-            numernumer_faktury.append(dokument.find('numer').text)
+            numer_faktury.append(dokument.find('numer').text)
         return numer_faktury
 
     def get_NIP(self,root):
@@ -179,11 +179,22 @@ class puzzle_invoices:
 
 
 def main():
+    import pandas as pd
     faktury=puzzle_invoices()
     root=faktury.import_xml()
-    print(faktury.get_netto(root))
+    #print(faktury.get_netto(root))
+    lista=[[faktury.get_data_wystawienia(root)],
+           [faktury.get_termin(root)],
+           [faktury.get_numer(root)],
+           [faktury.get_nazwa_kontrahenta(root)],
+           [faktury.get_kwota(root)]]
+                 # columns = ["Data wystawienia" , "Termin płatności", "Numer faktury", "Nazwa kontrahenta", "Kwota"]
+    nazwy=pd.Series(lista)
 
-    data_wystawienia=faktury.get_data_wystawienia(root)
+
+    print(lista)
+    print(nazwy)
+    # data_wystawienia=faktury.get_data_wystawienia(root)
 
 if __name__ == "__main__":
     main()
