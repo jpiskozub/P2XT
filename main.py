@@ -198,6 +198,11 @@ def main():
     print(lista)
     print(nazwy)
 
+    for i in range(len(lista[1])):
+        if str(lista[1,i]) in bank_data(i:10):
+            checklist.append(lista[1,i])
+
+
 
 if __name__ == "__main__":
     main()
