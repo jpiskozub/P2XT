@@ -41,7 +41,7 @@ class puzzle_invoices:
 
     directory='faktury.xml'
 
-    def import_xml(self):
+    def import_xml():
         import xml.etree.ElementTree as ET
         tree = ET.parse('faktury.xml')
         root = tree.getroot()
@@ -90,28 +90,28 @@ class puzzle_invoices:
     #     faktury=[data, data_wystawienia, termin, numer , nazwa_kontrahenta, numer_nip, suma_vat, kwota_netto, kwota_vat]
     #     return (faktury)
 
-    def get_data_wystawienia(self,root):
+    def get_data_wystawienia(root):
 
         data_wystawienia=[]
         for dokument in root.findall('dokument'):
             data_wystawienia.append(dokument.find('data_wystawienia').text)
         return (data_wystawienia)
 
-    def get_termin(self,root):
+    def get_termin(root):
 
         termin=[]
         for dokument in root.findall('dokument'):
             termin.append(dokument.find('termin').text)
         return termin
 
-    def get_numer(self,root):
+    def get_numer(root):
 
         numer_faktury=[]
         for dokument in root.findall('dokument'):
             numer_faktury.append(dokument.find('numer').text)
         return numer_faktury
 
-    def get_NIP(self,root):
+    def get_NIP(root):
         numer_nip = []
         for dokument in root.findall('dokument'):
             kontrahent = dokument.find('kontrahent')
@@ -119,7 +119,7 @@ class puzzle_invoices:
                 numer_nip.append(nip.text)
         return numer_nip
 
-    def get_nazwa_kontrahenta(self,root):
+    def get_nazwa_kontrahenta(root):
         nazwa_kontrahenta = []
         for dokument in root.findall('dokument'):
             kontrahent = dokument.find('kontrahent')
@@ -127,7 +127,7 @@ class puzzle_invoices:
                 nazwa_kontrahenta.append(nazwa.text)
         return nazwa_kontrahenta
 
-    def get_adres_kontrahenta(self,root):
+    def get_adres_kontrahenta(root):
         adres_kontrahenta = []
         for dokument in root.findall('dokument'):
             kontrahent = dokument.find('kontrahent')
@@ -135,7 +135,7 @@ class puzzle_invoices:
                 adres_kontrahenta.append(adres.text)
         return adres_kontrahenta
 
-    def get_kwota(self,root):
+    def get_kwota(root):
         naleznosc = []
         for dokument in root.findall('dokument'):
             ksieguj = dokument.find('ksieguj')
@@ -143,7 +143,7 @@ class puzzle_invoices:
                 naleznosc.append(kwota.text)
         return naleznosc
 
-    def get_skala_VAT(self,root):
+    def get_skala_VAT(root):
         skala_VAT = []
         for dokument in root.findall('dokument'):
             rejvat = dokument.find('rejVAT')
@@ -151,7 +151,7 @@ class puzzle_invoices:
                 skala_VAT.append(skala.text)
         return skala_VAT
 
-    def get_netto(self,root):
+    def get_netto(root):
         kwota_netto = []
         for dokument in root.findall('dokument'):
             rejvat = dokument.find('rejVAT')
@@ -160,7 +160,7 @@ class puzzle_invoices:
                     kwota_netto.append(netto.text)
         return kwota_netto
 
-    def get_VAT(self,root):
+    def get_VAT(root):
         kwota_VAT = []
         for dokument in root.findall('dokument'):
             rejvat = dokument.find('rejVAT')
@@ -169,7 +169,7 @@ class puzzle_invoices:
                     kwota_VAT.append(vat.text)
         return kwota_VAT
 
-    def get_status(self, root):
+    def get_status(root):
         status = []
         for dokument in root.findall('dokument'):
             for zaplata in dokument.iter('zaplata'):
@@ -178,31 +178,32 @@ class puzzle_invoices:
 
 
 
-def main():
-    import pandas as pd
-    faktury=puzzle_invoices()
-    root=faktury.import_xml()
+#def main():
+import pandas as pd
+faktury=puzzle_invoices()
+root=faktury.import_xml()
 
-    lista=[[faktury.get_data_wystawienia(root)],
-           [faktury.get_termin(root)],
-           [faktury.get_numer(root)],
-           [faktury.get_nazwa_kontrahenta(root)],
-           [faktury.get_kwota(root)]]
-                 # columns = ["Data wystawienia" , "Termin płatności", "Numer faktury", "Nazwa kontrahenta", "Kwota"]
-    nazwy=pd.Series(lista)
-
-
-    # print(pd.read_xml('faktury.xml'))
-    bank_data = pd.read_csv('wyciag.csv', encoding='windows-1250')
-    print(bank_data)
-    print(lista)
-    print(nazwy)
-
-    for i in range(len(lista[1])):
-        if str(lista[1,i]) in bank_data(i:10):
-            checklist.append(lista[1,i])
+lista=[faktury.get_data_wystawienia(root),
+       faktury.get_termin(root),
+       faktury.get_numer(root),
+       faktury.get_nazwa_kontrahenta(root),
+       faktury.get_kwota(root)]
+             # columns = ["Data wystawienia" , "Termin płatności", "Numer faktury", "Nazwa kontrahenta", "Kwota"]
+nazwy=pd.Series(lista)
 
 
+# print(pd.read_xml('faktury.xml'))
+bank_data = pd.read_csv('wyciag.csv', encoding='windows-1250')
+print(bank_data)
+print(lista)
+print(nazwy)
+checklist=[]
 
-if __name__ == "__main__":
-    main()
+for i in range(len(lista[1])):
+    if str(lista[1:i]) in bank_data[i:10]:
+        checklist.append(lista[1:i])
+
+
+
+#if __name__ == "__main__":
+#    main()
