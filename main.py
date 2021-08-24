@@ -178,31 +178,32 @@ class puzzle_invoices:
 
 
 
-def main():
-    import pandas as pd
-    faktury=puzzle_invoices()
-    root=faktury.import_xml()
+#def main():
+import pandas as pd
+faktury=puzzle_invoices()
+root=faktury.import_xml()
 
-    lista=[[faktury.get_data_wystawienia(root)],
-           [faktury.get_termin(root)],
-           [faktury.get_numer(root)],
-           [faktury.get_nazwa_kontrahenta(root)],
-           [faktury.get_kwota(root)]]
-                 # columns = ["Data wystawienia" , "Termin płatności", "Numer faktury", "Nazwa kontrahenta", "Kwota"]
-    nazwy=pd.Series(lista)
-
-
-    # print(pd.read_xml('faktury.xml'))
-    bank_data = pd.read_csv('wyciag.csv', encoding='windows-1250')
-    print(bank_data)
-    print(lista)
-    print(nazwy)
-
-    for i in range(len(lista[1])):
-        if str(lista[1,i]) in bank_data(i:10):
-            checklist.append(lista[1,i])
+lista=[faktury.get_data_wystawienia(root),
+       faktury.get_termin(root),
+       faktury.get_numer(root),
+       faktury.get_nazwa_kontrahenta(root),
+       faktury.get_kwota(root)]
+             # columns = ["Data wystawienia" , "Termin płatności", "Numer faktury", "Nazwa kontrahenta", "Kwota"]
+nazwy=pd.Series(lista)
 
 
+# print(pd.read_xml('faktury.xml'))
+bank_data = pd.read_csv('wyciag.csv', encoding='windows-1250')
+print(bank_data)
+print(lista)
+print(nazwy)
+checklist=[]
 
-if __name__ == "__main__":
-    main()
+for i in range(len(lista[1])):
+    if str(lista[1:i]) in bank_data[i:10]:
+        checklist.append(lista[1:i])
+
+
+
+#if __name__ == "__main__":
+#    main()
